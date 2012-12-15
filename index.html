@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset=utf-8>
+<title>My Dijit</title>
+<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2"></script>
+<script type="text/javascript" src="Pagination.js"></script>
+<script>
+require(["dojo/ready"], function(ready){
+    ready(function(){
+        var Pagination = new esri.dijit.Pagination(null, dojo.byId('pagination'));
+		Pagination.startup();
+    });
+});
+</script>
+</head>
+<body>
+<div id="pagination"></div>
+</body>	
+</html>
