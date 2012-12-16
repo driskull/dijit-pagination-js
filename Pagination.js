@@ -89,6 +89,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
             this.showPreviousNext = true;
             this.showFirstLast = true;
             this.showHelip = true;
+			this.theme = 'dojoPage';
         },
 
         // set variables that aren't to be modified
@@ -102,6 +103,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
             // css classes
             this._selectedClass = 'pagDijitSelected';
             this._newSelectedClass = 'pagDijitNewSelected';
+			this._itemClass = 'pagDijitItem';
             this._itemEnabledClass = 'pagDijitItemEnabled';
             this._itemDisabledClass = 'pagDijitItemDisabled';
             this._itemMiddleClass = 'pagDijitItemMiddle';
@@ -138,7 +140,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                 listClass = this._selectedClass;
             }
             // page list item
-            return '<li tabindex="0" title="' + this._i18n.pagination.page + ' ' + number.format(e.index) + '" data-offset="' + e.index + '" class="' + this._itemMiddleClass + ' ' + listClass + '"><span>' + number.format(e.index) + '</span></li>';
+            return '<li tabindex="0" title="' + this._i18n.pagination.page + ' ' + number.format(e.index) + '" data-offset="' + e.index + '" class="' + this._itemClass + ' ' + this._itemMiddleClass + ' ' + listClass + '"><div><span>' + number.format(e.index) + '</span></div></li>';
         },
 
         _createPagination: function () {
@@ -192,17 +194,17 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                         firstClass = _self._itemEnabledClass;
                         firstOffset = 'data-offset="' + _self._previousItem + '"';
                     }
-                    _self._startHTML += '<li tabindex="0" title="' + _self._i18n.pagination.previous + '" class="' + _self._itemPreviousClass + ' ' + firstClass + '" ' + firstOffset + '><span>' + _self._i18n.pagination.previous + '</span></li>';
+                    _self._startHTML += '<li tabindex="0" title="' + _self._i18n.pagination.previous + '" class="' + _self._itemClass + ' ' + _self._itemPreviousClass + ' ' + firstClass + '" ' + firstOffset + '><div><span>' + _self._i18n.pagination.previous + '</span></div></li>';
                 }
                 // pagination first page
                 if (_self.showFirstLast && _self._currentIndex > (_self.size + 1)) {
-                    _self._startHTML += '<li tabindex="0" class="' + _self._itemFirstClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.first + '" data-offset="' + _self._firstItem + '"><span>' + number.format(_self._firstItem) + _self._helipText + '</span></li>';
+                    _self._startHTML += '<li tabindex="0" class="' + _self._itemClass + ' ' + _self._itemFirstClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.first + '" data-offset="' + _self._firstItem + '"><div><span>' + number.format(_self._firstItem) + _self._helipText + '</span></div></li>';
                 } else {
                     _self._middleCount = _self._middleCount - 1;
                 }
                 // pagination last page
                 if (_self.showFirstLast && _self._currentIndex < (_self._lastItem - _self.size)) {
-                    _self._endHTML += '<li tabindex="0" class="' + _self._itemLastClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.last + ' (' + number.format(_self._lastItem) + ')" data-offset="' + _self._lastItem + '"><span>' + _self._helipText + number.format(_self._lastItem) + '</span></li>';
+                    _self._endHTML += '<li tabindex="0" class="' + _self._itemClass + ' ' + _self._itemLastClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.last + ' (' + number.format(_self._lastItem) + ')" data-offset="' + _self._lastItem + '"><div><span>' + _self._helipText + number.format(_self._lastItem) + '</span></div></li>';
                 } else {
                     _self._middleCount = _self._middleCount - 1;
                 }
@@ -214,7 +216,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                         lastClass = _self._itemEnabledClass;
                         lastOffset = 'data-offset="' + _self._nextItem + '"';
                     }
-                    _self._endHTML += '<li tabindex="0" title="' + _self._i18n.pagination.next + '" class="' + _self._itemNextClass + ' ' + lastClass + '" ' + lastOffset + '><span>' + _self._i18n.pagination.next + '</span></li>';
+                    _self._endHTML += '<li tabindex="0" title="' + _self._i18n.pagination.next + '" class="' + _self._itemClass + ' ' + _self._itemNextClass + ' ' + lastClass + '" ' + lastOffset + '><div><span>' + _self._i18n.pagination.next + '</span></div></li>';
                 }
                 // create each pagination item
                 for (var i = 1; i <= _self._lastItem; i++) {
