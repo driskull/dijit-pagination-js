@@ -49,7 +49,7 @@
     transition: background-color 0.25s ease-in;
 }
 
-.dojoPage ul .pagDijitSelected, .dojoPage ul .pagDijitSelected:hover, .dojoPage ul .pagDijitSelected:focus {
+.dojoPage .pagDijitSelected, .dojoPage .pagDijitSelected:hover, .dojoPage .pagDijitSelected:focus {
     cursor: default;
     font-weight: bold;
     color: #fff;
@@ -62,4 +62,13 @@
     background: -ms-linear-gradient(top, #5a5a5a 0%, #696969 50%, #7b7b7b 100%);
     background: linear-gradient(top, #5a5a5a 0%, #696969 50%, #7b7b7b 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5a5a5a', endColorstr='#7b7b7b', GradientType=0 );
+}
+
+
+.dojoPage .pagDijitItemDisabled, .dojoPage .pagDijitItemDisabled:hover, .dojoPage .pagDijitItemDisabled:focus {
+    background: #ddd;
+    opacity: 0.6;
+    cursor: default;
+     -webkit-box-shadow: none;
+    box-shadow: none;
 }

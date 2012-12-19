@@ -9,14 +9,16 @@
 <script>
 require(["dojo/ready"], function(ready){
     ready(function(){
-        var Pagination = new dijit.Pagination({}, dojo.byId('pagination'));
+        var Pagination = new dijit.Pagination({
+            totalResults: 100
+        }, dojo.byId('pagination'));
 		Pagination.startup();
 
 
 		var Pagination2 = new dijit.Pagination({
     		totalResults: 900,
     		resultsPerPage: 10,
-    		currentPage: 0,
+    		currentPage: 1,
     		showPreviousNext: false
 		}, dojo.byId('pagination2'));
 		Pagination2.startup();
@@ -37,6 +39,7 @@ require(["dojo/ready"], function(ready){
 <body>
 <div id="pagination"></div>
 <div style="clear:both;"></div>
+<div></div>
 <div id="pagination2"></div>
 <div style="clear:both;"></div>
 <div id="pagination3"></div>

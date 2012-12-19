@@ -81,7 +81,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
             _self._npCount = 0;
             _self._helipText = '';
             _self._totalMiddlePages = (2 * _self.pagesPerSide) + 1;
-            _self._helipText = _self.helip;
+            _self._helipText = _self.helip || "";
 
             // if pagination is necessary
             if (_self.resultsPerPage && (_self.totalResults > _self.resultsPerPage)) {
@@ -224,29 +224,23 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
         // default settings
         _setPublicDefaults: function () {
             // Create public defaults here
-            this.totalResults = 100;
-            this.resultsPerPage = 5;
+            this.totalResults = 0;
+            this.resultsPerPage = 10;
             this.currentPage = 0;
-
-
-
-            this.pagesPerSide = 1;
+            // options
+            this.pagesPerSide = 2;
             this.showPreviousNext = true;
             this.showFirstLast = true;
-
-
             this.helip = i18n.pagination.helip
 			this.theme = 'dojoPage';
         },
 
         // set variables that aren't to be modified
         _setPrivateDefaults: function () {
-
             // Internationalization
             this._i18n = i18n;
-
+            // connections
             this._eventHandlers = [];
-
             // css classes
             this._selectedClass = 'pagDijitSelected';
             this._newSelectedClass = 'pagDijitNewSelected';
