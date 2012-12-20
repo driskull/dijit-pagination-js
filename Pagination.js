@@ -46,7 +46,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                 return;
             }
             // create pagination links
-            this.paginate();
+            this.render();
             // setup connections
             this._createEventHandlers();
             // set widget ready
@@ -68,7 +68,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
             this.inherited(arguments);
         },
 
-        paginate: function () {
+        render: function () {
             var _self = this;
             // variables
             _self._html = '';
@@ -82,7 +82,6 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
             _self._helipText = '';
             _self._totalMiddlePages = (2 * _self.pagesPerSide) + 1;
             _self._helipText = _self.helip || "";
-
             // if pagination is necessary
             if (_self.resultsPerPage && (_self.totalResults > _self.resultsPerPage)) {
                 // create pagination list
@@ -94,13 +93,13 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                     _self._currentIndex = 1;
                 }
                 // first link
-                _self._firstItem = 1;
+                _self._firstPage = 1;
                 // previous link
-                _self._previousItem = _self._currentIndex - 1;
+                _self._previousPage = _self._currentIndex - 1;
                 // next link
-                _self._nextItem = _self._currentIndex + 1;
+                _self._nextPage = _self._currentIndex + 1;
                 // last link
-                _self._lastItem = Math.ceil(_self.totalResults / _self.resultsPerPage);
+                _self.totalPages = Math.ceil(_self.totalResults / _self.resultsPerPage);
                 // determine next and previous count
                 if (_self.showPreviousNext) {
                     _self._npCount = 2;
@@ -108,7 +107,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                 // determine pagination total size
                 _self._paginationCount = _self._npCount + _self._totalMiddlePages;
                 // if pages matches size of pagination
-                if (_self._lastItem === _self._paginationCount) {
+                if (_self.totalPages === _self._paginationCount) {
                     _self._helipText = '';
                 }
                 // pagination previous
@@ -117,22 +116,22 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                         firstOffset = '';
                     if (_self._currentIndex > 1) {
                         firstClass = _self._itemEnabledClass;
-                        firstOffset = 'data-page="' + _self._previousItem + '"';
+                        firstOffset = 'data-page="' + _self._previousPage + '"';
                     }
                     _self._startHTML += '<li tabindex="0" title="' + _self._i18n.pagination.previous + '" class="' + _self._itemClass + ' ' + _self._itemPreviousClass + ' ' + firstClass + '" ' + firstOffset + '><div><span>' + _self._i18n.pagination.previous + '</span></div></li>';
                 }
-                // show first and last pages always
+                // always show first and last pages
                 if (_self.showFirstLast) {
                     // pagination first page
                     if(_self._currentIndex > (_self.pagesPerSide + 1)){
-                        _self._startHTML += '<li tabindex="0" class="' + _self._itemClass + ' ' + _self._itemFirstClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.first + '" data-page="' + _self._firstItem + '"><div><span>' + number.format(_self._firstItem) + _self._helipText + '</span></div></li>';
+                        _self._startHTML += '<li tabindex="0" class="' + _self._itemClass + ' ' + _self._itemFirstClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.first + '" data-page="' + _self._firstPage + '"><div><span>' + number.format(_self._firstPage) + _self._helipText + '</span></div></li>';
                     }
                     else {
                         _self._middleCount = _self._middleCount - 1;
                     }
                     // pagination last page
-                    if(_self._currentIndex < (_self._lastItem - _self.pagesPerSide)){
-                        _self._endHTML += '<li tabindex="0" class="' + _self._itemClass + ' ' + _self._itemLastClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.last + ' (' + number.format(_self._lastItem) + ')" data-page="' + _self._lastItem + '"><div><span>' + _self._helipText + number.format(_self._lastItem) + '</span></div></li>';
+                    if(_self._currentIndex < (_self.totalPages - _self.pagesPerSide)){
+                        _self._endHTML += '<li tabindex="0" class="' + _self._itemClass + ' ' + _self._itemLastClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.last + ' (' + number.format(_self.totalPages) + ')" data-page="' + _self.totalPages + '"><div><span>' + _self._helipText + number.format(_self.totalPages) + '</span></div></li>';
                     }
                     else {
                         _self._middleCount = _self._middleCount - 1;
@@ -142,14 +141,14 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                 if (_self.showPreviousNext) {
                     var lastClass = _self._itemDisabledClass,
                         lastOffset = '';
-                    if (_self._currentIndex < _self._lastItem) {
+                    if (_self._currentIndex < _self.totalPages) {
                         lastClass = _self._itemEnabledClass;
-                        lastOffset = 'data-page="' + _self._nextItem + '"';
+                        lastOffset = 'data-page="' + _self._nextPage + '"';
                     }
                     _self._endHTML += '<li tabindex="0" title="' + _self._i18n.pagination.next + '" class="' + _self._itemClass + ' ' + _self._itemNextClass + ' ' + lastClass + '" ' + lastOffset + '><div><span>' + _self._i18n.pagination.next + '</span></div></li>';
                 }
                 // create each pagination item
-                for (var i = 1; i <= _self._lastItem; i++) {
+                for (var i = 1; i <= _self.totalPages; i++) {
                     if (i <= (_self._currentIndex + _self.pagesPerSide) && i >= (_self._currentIndex - _self.pagesPerSide)) {
                         if (_self._firstMiddle === 0) {
                             _self._firstMiddle = i;
@@ -163,13 +162,13 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                     }
                 }
                 // if last middle is last page
-                if (_self._lastMiddle === _self._lastItem) {
+                if (_self._lastMiddle === _self.totalPages) {
                     // get remainderStart start
                     _self._remainderStart = _self._firstMiddle - 1;
                     // while not enough remainders
                     while (_self._middleCount < _self._totalMiddlePages) {
                         // if remainder start is less or equal to first page
-                        if (_self._remainderStart <= _self._firstItem) {
+                        if (_self._remainderStart <= _self._firstPage) {
                             // end while
                             break;
                         }
@@ -185,13 +184,13 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                     }
                 }
                 // if first middle is first page
-                else if (_self._firstMiddle === _self._firstItem) {
+                else if (_self._firstMiddle === _self._firstPage) {
                     // get remainderStart start
                     _self._remainderStart = _self._lastMiddle + 1;
                     // while not enough remainders
                     while (_self._middleCount < _self._totalMiddlePages) {
                         // if remainder start is greater or equal to last page
-                        if (_self._remainderStart >= _self._lastItem) {
+                        if (_self._remainderStart >= _self.totalPages) {
                             // end while
                             break;
                         }
@@ -214,7 +213,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
             _self._html += '<div class="' + _self._clearClass + '"></div>';
             // insert into html
             _self.containerNode.innerHTML = _self._html;
-            this.emit("page", {});
+            this.emit("render", {});
         },
 
         /* ---------------- */
@@ -262,12 +261,17 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                     // clicked
                     query(this).addClass(this._newSelectedClass);
                     // get offset number
-                    var page = dojo.query(this).attr('data-page')[0];
-                    _self.emit("select", {
-                        page: page
+                    var selectedPage = dojo.query(this).attr('data-page')[0];
+                    //
+                    _self.emit("page", {
+                        selectedPage: selectedPage,
+                        totalResults: _self.totalResults,
+                        totalPages: _self.totalPages,
+                        resultsPerPage: _self.resultsPerPage,
+                        currentPage: _self.currentPage
                     });
-                    _self.currentPage = page;
-                    _self.paginate();
+                    _self.currentPage = selectedPage;
+                    _self.render();
                 }
             });
             this._eventHandlers.push(itemClick);
