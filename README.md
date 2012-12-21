@@ -120,7 +120,7 @@ myApp.Pagination(options? [Optional Object], srcNode [Required DOM Element])
 ## Samples
 
 ### Sample 1
-Simple example that just changes the page after a new page is selected
+Simple example that just changes the page after a new page is selected.
 [View demo](http://driskull.github.com/dijit-pagination-js/#ex1)
 ```javascript
 var Pagination = new myApp.Pagination({
