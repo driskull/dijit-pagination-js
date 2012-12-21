@@ -21,7 +21,7 @@
 }
 
 .dojoPage .pagDijitLoading {
-    background: #fff url(img/ajax-loader.gif) no-repeat center center;
+    background: #fff url(../img/ajax-loader.gif) no-repeat center center;
 }
 
 .dojoPage .pagDijitLoading ul {

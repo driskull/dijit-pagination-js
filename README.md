@@ -1,4 +1,4 @@
-# dijit-pagination-js
+# dijit-pagination-js 0.1
 A Dijit for pagination
 
 ## Description
@@ -25,7 +25,7 @@ var dojoConfig = {
 
 Include Dojo and your style for pagination
 ```html
-<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3" type="text/javascript"></script>
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.2/dojo/dojo.js"></script>
 <link charset="utf-8" href="css/Pagination.css" media="screen" rel="stylesheet" type="text/css">
 ```
 

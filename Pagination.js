@@ -10,8 +10,8 @@ define([
     "dojo/text!./templates/Pagination.html",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetBase",
-    "dojo/number"
-],
+    "dojo/number"],
+
 function (declare, parser, ready, Evented, domConstruct, i18n, on, query, template, _TemplatedMixin, _WidgetBase, number) {
     declare("myApp.Pagination", [_WidgetBase, _TemplatedMixin, Evented], {
         // put methods, attributes, etc. here
@@ -53,7 +53,7 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
             this.emit("load", {});
         },
 
-        postCreate: function(){
+        postCreate: function () {
             // setup connections
             this._createEventHandlers();
         },
@@ -129,17 +129,15 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
                 // always show first and last pages
                 if (_self.showFirstLast) {
                     // pagination first page
-                    if(_self._currentIndex > (_self.pagesPerSide + 1)){
+                    if (_self._currentIndex > (_self.pagesPerSide + 1)) {
                         _self._startHTML += '<li role="button" tabindex="0" class="' + _self._itemClass + ' ' + _self._itemFirstClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.firstTitle + '" data-page="' + _self._firstPage + '"><div><span>' + number.format(_self._firstPage) + _self._helipText + '</span></div></li>';
-                    }
-                    else {
+                    } else {
                         _self._middleCount = _self._middleCount - 1;
                     }
                     // pagination last page
-                    if(_self._currentIndex < (_self.totalPages - _self.pagesPerSide)){
+                    if (_self._currentIndex < (_self.totalPages - _self.pagesPerSide)) {
                         _self._endHTML += '<li role="button" tabindex="0" class="' + _self._itemClass + ' ' + _self._itemLastClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.lastTitle + ' (' + number.format(_self.totalPages) + ')" data-page="' + _self.totalPages + '"><div><span>' + _self._helipText + number.format(_self.totalPages) + '</span></div></li>';
-                    }
-                    else {
+                    } else {
                         _self._middleCount = _self._middleCount - 1;
                     }
                 }
@@ -230,8 +228,8 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
         /* ---------------- */
         /* Private Functions */
         /* ---------------- */
-		
-		_createMiddleItem: function (e) {
+
+        _createMiddleItem: function (e) {
             // class
             var listClass = this._itemEnabledClass;
             var dataPage = 'data-page="' + e.index + '"';
@@ -243,7 +241,7 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
             // page list item
             return '<li role="button" tabindex="0" title="' + this._i18n.pagination.pageTitle + ' ' + number.format(e.index) + '" ' + dataPage + ' class="' + this._itemClass + ' ' + this._itemMiddleClass + ' ' + listClass + '"><div><span>' + number.format(e.index) + '</span></div></li>';
         },
-		
+
         // default settings
         _setPublicDefaults: function () {
             // Create public defaults here
@@ -254,8 +252,8 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
             this.pagesPerSide = 2;
             this.showPreviousNext = true;
             this.showFirstLast = true;
-            this.helip = i18n.pagination.helip
-			this.theme = 'dojoPage';
+            this.helip = i18n.pagination.helip;
+            this.theme = 'dojoPage';
         },
 
         // set variables that aren't to be modified
@@ -269,7 +267,7 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
             this._loadingClass = 'pagDijitLoading';
             this._selectedClass = 'pagDijitSelected';
             this._newSelectedClass = 'pagDijitNewSelected';
-			this._itemClass = 'pagDijitItem';
+            this._itemClass = 'pagDijitItem';
             this._itemEnabledClass = 'pagDijitItemEnabled';
             this._itemDisabledClass = 'pagDijitItemDisabled';
             this._itemMiddleClass = 'pagDijitItemMiddle';
@@ -283,36 +281,36 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
         _createEventHandlers: function () {
             var _self = this;
             var pageClick = on(_self.containerNode, '[data-page]:click', function (evt) {
-				if(!_self.disabled){
+                if (!_self.disabled) {
                     // disable more clicking for now
                     _self.disabled = true;
                     // remove selected class
                     query('.pagDijitItem', _self.containerNode).removeClass(_self._selectedClass);
-					// add selected class
-					query(this).addClass(_self._newSelectedClass);
+                    // add selected class
+                    query(this).addClass(_self._newSelectedClass);
                     // add loading class to container
                     query(_self.containerNode).addClass(_self._loadingClass);
-					// get offset number
-					var selectedPage = parseInt(dojo.query(this).attr('data-page')[0], 10);
-					var selectedResultStart = selectedPage * _self.resultsPerPage;
-					var selectedResultEnd = selectedResultStart + _self.resultsPerPage;
-					// event
-					_self.emit("page", {
-						bubbles: false,
-						cancelable: false,
-						detail: {
-							selectedPage: selectedPage,
-							selectedResultStart: selectedResultStart,
-							selectedResultEnd: selectedResultEnd
-						}
-					});
-				}
+                    // get offset number
+                    var selectedPage = parseInt(dojo.query(this).attr('data-page')[0], 10);
+                    var selectedResultStart = selectedPage * _self.resultsPerPage;
+                    var selectedResultEnd = selectedResultStart + _self.resultsPerPage;
+                    // event
+                    _self.emit("page", {
+                        bubbles: false,
+                        cancelable: false,
+                        detail: {
+                            selectedPage: selectedPage,
+                            selectedResultStart: selectedResultStart,
+                            selectedResultEnd: selectedResultEnd
+                        }
+                    });
+                }
             });
             this._eventHandlers.push(pageClick);
         }
 
     });
-    ready(function(){
+    ready(function () {
         // Call the parser manually so it runs after our widget is defined, and page has finished loading
         parser.parse();
     });
