@@ -1,34 +1,36 @@
 # dijit-pagination-js
-This is a Dojo widget for pagination
+A Dijit for pagination
 
-## How it works
-Magic
+## Description
+This Dojo widget renders a pagination list in the DOM element of yoour choosing so you can easily paginate your results.
 
 ## Constructor
-- **totalResults** (required) <Number> Number of results for whatever you're paginating.
-- **resultsPerPage** (optional) <Number> How many results are you showing per page?
-- **currentPage** (optional) <Number> Current page you're on. Usually you'll start at 0. Default:0.
-- **pagesPerSide** (optional) <Number> How many pages do you want to show on each side of the current page. This determines the visible pagination widget size.
-- **showPreviousNext** (optional) <Boolean> Show the previous and next buttons. (true/false). Default:true.
-- **showFirstLast** (optional) <Boolean> Always show the first and last page. (true/false). Default:true.
-- **theme** (optional) <String> Applies this class name to the containing widget's element for styling. Default "dojoPage".
-- **helip** (optional) <String> Applies this text before the last page number and after the first page number if showFirstLast is true. Default "..." (&helip;).
+myApp.Pagination(options? [Optional Object], srcNode [Required DOM Element])
+- **totalResults** (required) [Number] Number of results for whatever you're paginating. Default: 0.
+- **resultsPerPage** (optional) [Number] How many results are you showing per page? Default: 10.
+- **currentPage** (optional) [Number] Current page you're on. Usually you'll start at 0. Default: 0.
+- **pagesPerSide** (optional) [Number] How many pages do you want to show on each side of the current page. This determines the visible pagination widget size Default: 2.
+- **showPreviousNext** (optional) [Boolean] Show the previous and next buttons. (true/false). Default: true.
+- **showFirstLast** (optional) [Boolean] Always show the first and last page. (true/false). Default: true.
+- **theme** (optional) [String] Applies this class name to the containing widget's element for styling. Default: "dojoPage".
+- **disabled** (optional) [Boolean] Page click events will not occur if this is set to true. Default: false.
+- **helip** (optional) [String] Applies this text before the last page number and after the first page number if showFirstLast is true. Default: "..." (&helip;).
 
 ## Properties
-- **totalResults** <Number> Number of results for whatever you're paginating.
-- **resultsPerPage** <Number> How many results are you showing per page?
-- **currentPage** <Number> Current page you're on. Usually you'll start at 0. Default:0.
-- **pagesPerSide** <Number> How many pages do you want to show on each side of the current page. This determines the visible pagination widget size.
-- **showPreviousNext** <Boolean> Show the previous and next buttons. (true/false). Default:true.
-- **showFirstLast** <Boolean> Always show the first and last page. (true/false). Default:true.
-- **theme** <String> Applies this class name to the containing widget's element for styling. Default "dojoPage".
-- **helip** <String> Applies this text before the last page number and after the first page number if showFirstLast is true. Default "..." (&helip;).
-- **currentResultStart** <Number> Starting offset number of results.
-- **currentResultEnd** <Number> Ending offset number of results.
-- **loaded**  <Boolean> Loaded state of the widget. (true/false).
+- **totalResults** [Number] Number of results for whatever you're paginating.
+- **resultsPerPage** [Number] How many results are you showing per page?
+- **currentPage** [Number] Current page you're on. Usually you'll start at 0.
+- **pagesPerSide** [Number] How many pages do you want to show on each side of the current page. This determines the visible pagination widget size.
+- **showPreviousNext** [Boolean] Show the previous and next buttons.
+- **showFirstLast** [Boolean] Always show the first and last page.
+- **theme** [String] Applies this class name to the containing widget's element for styling.
+- **helip** [String] Applies this text before the last page number and after the first page number if showFirstLast is true.
+- **currentResultStart** [Number] Starting offset number of results.
+- **currentResultEnd** [Number] Ending offset number of results.
+- **loaded**  [Boolean] Loaded state of the widget.
 
 ## Methods
-- **startup()** void. This initializes the widget.
+- **startup()** void.
 - **render()** void. Renders the pagination with the current assigned properties. The properties are watched for changes and will automatically be re-rendered.
 - **destroy()** void. Destroys the widget's connections and DOM.
 
@@ -41,12 +43,25 @@ Magic
 		bubbles: false,
 		cancelable: false,
 		detail: {
-			selectedPage: <Page Number Selected>,
-			selectedResultStart: <Page Offset>,
-			selectedResultEnd: <Page Offset + resultsPerPage>
+			selectedPage: [Page Number Selected],
+			selectedResultStart: [Page Offset],
+			selectedResultEnd: [Page Offset + resultsPerPage]
 		}
 	}
 	```
+	
+## CSS Classes
+- pagDijitSelected
+- pagDijitNewSelected
+- pagDijitItem
+- pagDijitItemEnabled
+- pagDijitItemDisabled
+- pagDijitItemMiddle
+- pagDijitItemFirst
+- pagDijitItemLast
+- pagDijitItemPrevious
+- pagDijitItemNext
+- pagDijitClear
 
 ## Samples
 

@@ -274,22 +274,24 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
         _createEventHandlers: function () {
             var _self = this;
             var pageClick = on(_self.containerNode, '[data-page]:click', function (evt) {
-				// add selected class
-                query(this).addClass(this._newSelectedClass);
-                // get offset number
-                var selectedPage = parseInt(dojo.query(this).attr('data-page')[0], 10);
-                var selectedResultStart = selectedPage * _self.resultsPerPage;
-                var selectedResultEnd = selectedResultStart + _self.resultsPerPage;
-                // event
-                _self.emit("page", {
-                    bubbles: false,
-                    cancelable: false,
-                    detail: {
-                        selectedPage: selectedPage,
-                        selectedResultStart: selectedResultStart,
-                        selectedResultEnd: selectedResultEnd
-                    }
-                });
+				if(!_self.disabled){
+					// add selected class
+					query(this).addClass(this._newSelectedClass);
+					// get offset number
+					var selectedPage = parseInt(dojo.query(this).attr('data-page')[0], 10);
+					var selectedResultStart = selectedPage * _self.resultsPerPage;
+					var selectedResultEnd = selectedResultStart + _self.resultsPerPage;
+					// event
+					_self.emit("page", {
+						bubbles: false,
+						cancelable: false,
+						detail: {
+							selectedPage: selectedPage,
+							selectedResultStart: selectedResultStart,
+							selectedResultEnd: selectedResultEnd
+						}
+					});
+				}
             });
             this._eventHandlers.push(pageClick);
         }
