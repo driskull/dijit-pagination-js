@@ -121,6 +121,7 @@ myApp.Pagination(options? [Optional Object], srcNode [Required DOM Element])
 
 ### Sample 1
 Simple example that just changes the page after a new page is selected
+[View demo](http://driskull.github.com/dijit-pagination-js/#ex1)
 ```javascript
 var Pagination = new myApp.Pagination({
     totalResults: 100
@@ -134,6 +135,7 @@ Pagination.startup();
 
 ### Sample 2
 Show options and previous and next buttons can be disabled.
+[View demo](http://driskull.github.com/dijit-pagination-js/#ex2)
 ```javascript
 var Pagination2 = new myApp.Pagination({
 	totalResults: 900,
@@ -149,6 +151,7 @@ on(Pagination2, "page", function(evt){
 
 ### Sample 3
 Show options and first and last page buttons can be disabled.
+[View demo](http://driskull.github.com/dijit-pagination-js/#ex3)
 ```javascript
 var Pagination3 = new myApp.Pagination({
 	totalResults: 225,
@@ -164,6 +167,7 @@ on(Pagination3, "page", function(evt){
 
 ### Sample 4
 Demonstrate the loading style which will show when fetching new items to show before re-rendering.
+[View demo](http://driskull.github.com/dijit-pagination-js/#ex4)
 ```javascript
 var Pagination4 = new myApp.Pagination({
     totalResults: 500,
