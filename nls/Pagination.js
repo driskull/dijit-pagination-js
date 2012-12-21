@@ -1,8 +1,10 @@
 define({
     "root": ({
 		"pagination": {
-			"previous": "Previous",
-			"next": "Next",
+			"previous": "&laquo;",
+			"previousTitle":"Previous",
+			"next": "&raquo;",
+			"nextTitle":"Next",
 			"first": "First Page",
 			"last": "Last Page",
 			"helip": "&hellip;",

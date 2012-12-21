@@ -3,50 +3,116 @@
 <head>
 <meta charset=utf-8>
 <title>My Dijit</title>
-<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2"></script>
-<script type="text/javascript" src="Pagination.js"></script>
+<script>
+// host path regular expression
+var pathRegex = new RegExp(/\/[^\/]+$/);
+var locationPath = location.pathname.replace(pathRegex, '');
+// Dojo Config
+var dojoConfig = {
+    parseOnLoad: true,
+    packages: [{
+        name: "myApp",
+        location: locationPath
+    }]
+};
+</script>
+<style>
+pre{
+   border: 1px solid #cacaca;
+  line-height: 1.2em;
+  font: 12px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
+  padding: 10px;
+  overflow:auto;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  background-color: #FAFAFB;
+  color: #393939;
+  margin: 0px;
+}
+</style>
+<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3"></script>
 <link rel="stylesheet" href="Pagination.css" type="text/css" media="screen" charset="utf-8" />
 <script>
-require(["dojo/ready", "dojo/on"], function(ready, on){
+require(["dojo/ready", "dojo/on", "myApp/Pagination"], function(ready, on){
     ready(function(){
-        var Pagination = new dijit.Pagination({
+        // 1
+        var Pagination = new myApp.Pagination({
             totalResults: 100
         }, dojo.byId('pagination'));
-		Pagination.startup();
-		on(Pagination, "page", function(obj){
-    		console.log(obj);
-		});
+        on(Pagination, "page", function(evt){
+            // add loading spinner here
+            // showSpinner();
 
-		var Pagination2 = new dijit.Pagination({
+            // load your next results
+            // getResults();
+
+            // set selected page
+            this.set('currentPage', evt.detail.selectedPage);
+		});
+		Pagination.startup();
+		// 2
+		var Pagination2 = new myApp.Pagination({
     		totalResults: 900,
     		resultsPerPage: 10,
     		currentPage: 1,
     		pagesPerSide: 1,
     		showPreviousNext: false
 		}, dojo.byId('pagination2'));
+		on(Pagination2, "page", function(evt){
+            this.set('currentPage', evt.detail.selectedPage);
+		});
 		Pagination2.startup();
-
-
-		var Pagination3 = new dijit.Pagination({
+		// 3
+		var Pagination3 = new myApp.Pagination({
     		totalResults: 225,
     		resultsPerPage: 5,
     		currentPage: 7,
     		pagesPerSide: 3,
     		showFirstLast: false
 		}, dojo.byId('pagination3'));
+		on(Pagination3, "page", function(evt){
+            this.set('currentPage', evt.detail.selectedPage);
+		});
 		Pagination3.startup();
-
     });
 });
 </script>
 </head>
 <body>
+<h2>Example 1</h2>
 <div id="pagination"></div>
-<div style="clear:both;"></div>
-<div></div>
+<pre>
+var Pagination = new myApp.Pagination({
+    totalResults: 100
+}, dojo.byId('pagination'));
+</pre>
+<h2>Example 2</h2>
 <div id="pagination2"></div>
-<div style="clear:both;"></div>
+<pre>
+var Pagination2 = new myApp.Pagination({
+	totalResults: 900,
+	resultsPerPage: 10,
+	currentPage: 1,
+	pagesPerSide: 1,
+	showPreviousNext: false
+}, dojo.byId('pagination2'));
+Pagination2.startup();
+</pre>
+<h2>Example 3</h2>
 <div id="pagination3"></div>
-<div style="clear:both;"></div>
+<pre>
+var Pagination3 = new myApp.Pagination({
+	totalResults: 225,
+	resultsPerPage: 5,
+	currentPage: 7,
+	pagesPerSide: 3,
+	showFirstLast: false
+}, dojo.byId('pagination3'));
+Pagination3.startup();
+</pre>
 </body>
 </html>

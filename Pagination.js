@@ -1,18 +1,19 @@
-require([
-    "dojo/Evented",
+define([
     "dojo/_base/declare",
+    "dojo/parser",
+    "dojo/ready",
+    "dojo/Evented",
     "dojo/dom-construct",
     "dojo/i18n!./nls/Pagination.js",
     "dojo/on",
     "dojo/query",
     "dojo/text!./templates/Pagination.html",
-    "dijit/_OnDijitClickMixin",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetBase",
     "dojo/number"
 ],
-function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitClickMixin, _TemplatedMixin, _WidgetBase, number) {
-    declare("dijit.Pagination", [Evented, _WidgetBase, _OnDijitClickMixin, _TemplatedMixin], {
+function (declare, parser, ready, Evented, domConstruct, i18n, on, query, template, _TemplatedMixin, _WidgetBase, number) {
+    declare("myApp.Pagination", [_WidgetBase, _TemplatedMixin, Evented], {
         // put methods, attributes, etc. here
 
         // dijit HTML
@@ -26,12 +27,12 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
             // private variables
             this._setPrivateDefaults();
             // watch updates of public properties and update the widget accordingly
-            this.watch("totalResults", this.paginate);
-            this.watch("resultsPerPage", this.paginate);
-            this.watch("currentPage", this.paginate);
-            this.watch("pagesPerSide", this.paginate);
-            this.watch("showPreviousNext", this.paginate);
-            this.watch("showFirstLast", this.paginate);
+            this.watch("totalResults", this.render);
+            this.watch("resultsPerPage", this.render);
+            this.watch("currentPage", this.render);
+            this.watch("pagesPerSide", this.render);
+            this.watch("showPreviousNext", this.render);
+            this.watch("showFirstLast", this.render);
             // containing node
             this.domNode = srcRefNode;
         },
@@ -47,11 +48,14 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
             }
             // create pagination links
             this.render();
-            // setup connections
-            this._createEventHandlers();
             // set widget ready
             this.loaded = true;
             this.emit("load", {});
+        },
+
+        postCreate: function(){
+            // setup connections
+            this._createEventHandlers();
         },
 
         destroy: function () {
@@ -82,10 +86,12 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
             _self._helipText = '';
             _self._totalMiddlePages = (2 * _self.pagesPerSide) + 1;
             _self._helipText = _self.helip || "";
+            _self.currentResultStart = _self.currentPage * _self.resultsPerPage;
+            _self.currentResultEnd = _self.currentResultStart + _self.resultsPerPage;
             // if pagination is necessary
             if (_self.resultsPerPage && (_self.totalResults > _self.resultsPerPage)) {
                 // create pagination list
-                _self._html += '<ul>';
+                _self._html += '<ul role="presentation">';
                 // determine offset links
                 if (_self.currentPage) {
                     _self._currentIndex = parseInt(_self.currentPage, 10);
@@ -118,20 +124,20 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                         firstClass = _self._itemEnabledClass;
                         firstOffset = 'data-page="' + _self._previousPage + '"';
                     }
-                    _self._startHTML += '<li tabindex="0" title="' + _self._i18n.pagination.previous + '" class="' + _self._itemClass + ' ' + _self._itemPreviousClass + ' ' + firstClass + '" ' + firstOffset + '><div><span>' + _self._i18n.pagination.previous + '</span></div></li>';
+                    _self._startHTML += '<li role="button" tabindex="0" title="' + _self._i18n.pagination.previousTitle + '" class="' + _self._itemClass + ' ' + _self._itemPreviousClass + ' ' + firstClass + '" ' + firstOffset + '><div><span>' + _self._i18n.pagination.previous + '</span></div></li>';
                 }
                 // always show first and last pages
                 if (_self.showFirstLast) {
                     // pagination first page
                     if(_self._currentIndex > (_self.pagesPerSide + 1)){
-                        _self._startHTML += '<li tabindex="0" class="' + _self._itemClass + ' ' + _self._itemFirstClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.first + '" data-page="' + _self._firstPage + '"><div><span>' + number.format(_self._firstPage) + _self._helipText + '</span></div></li>';
+                        _self._startHTML += '<li role="button" tabindex="0" class="' + _self._itemClass + ' ' + _self._itemFirstClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.first + '" data-page="' + _self._firstPage + '"><div><span>' + number.format(_self._firstPage) + _self._helipText + '</span></div></li>';
                     }
                     else {
                         _self._middleCount = _self._middleCount - 1;
                     }
                     // pagination last page
                     if(_self._currentIndex < (_self.totalPages - _self.pagesPerSide)){
-                        _self._endHTML += '<li tabindex="0" class="' + _self._itemClass + ' ' + _self._itemLastClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.last + ' (' + number.format(_self.totalPages) + ')" data-page="' + _self.totalPages + '"><div><span>' + _self._helipText + number.format(_self.totalPages) + '</span></div></li>';
+                        _self._endHTML += '<li role="button" tabindex="0" class="' + _self._itemClass + ' ' + _self._itemLastClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.last + ' (' + number.format(_self.totalPages) + ')" data-page="' + _self.totalPages + '"><div><span>' + _self._helipText + number.format(_self.totalPages) + '</span></div></li>';
                     }
                     else {
                         _self._middleCount = _self._middleCount - 1;
@@ -145,7 +151,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                         lastClass = _self._itemEnabledClass;
                         lastOffset = 'data-page="' + _self._nextPage + '"';
                     }
-                    _self._endHTML += '<li tabindex="0" title="' + _self._i18n.pagination.next + '" class="' + _self._itemClass + ' ' + _self._itemNextClass + ' ' + lastClass + '" ' + lastOffset + '><div><span>' + _self._i18n.pagination.next + '</span></div></li>';
+                    _self._endHTML += '<li role="button" tabindex="0" title="' + _self._i18n.pagination.nextTitle + '" class="' + _self._itemClass + ' ' + _self._itemNextClass + ' ' + lastClass + '" ' + lastOffset + '><div><span>' + _self._i18n.pagination.next + '</span></div></li>';
                 }
                 // create each pagination item
                 for (var i = 1; i <= _self.totalPages; i++) {
@@ -213,7 +219,7 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
             _self._html += '<div class="' + _self._clearClass + '"></div>';
             // insert into html
             _self.containerNode.innerHTML = _self._html;
-            this.emit("render", {});
+            _self.emit("render", {});
         },
 
         /* ---------------- */
@@ -256,25 +262,24 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
 
         _createEventHandlers: function () {
             var _self = this;
-            var itemClick = on(_self.containerNode, '[data-page]:click', function (event) {
-                if (event.type === 'click' || (event.type === 'keyup' && event.keyCode === 13)) {
-                    // clicked
-                    query(this).addClass(this._newSelectedClass);
-                    // get offset number
-                    var selectedPage = dojo.query(this).attr('data-page')[0];
-                    //
-                    _self.emit("page", {
+            var pageClick = on(_self.containerNode, '[data-page]:click', function (evt) {
+                query(this).addClass(this._newSelectedClass);
+                // get offset number
+                var selectedPage = parseInt(dojo.query(this).attr('data-page')[0], 10);
+                var selectedResultStart = selectedPage * _self.resultsPerPage;
+                var selectedResultEnd = selectedResultStart + _self.resultsPerPage;
+                // event
+                _self.emit("page", {
+                    bubbles: false,
+                    cancelable: false,
+                    detail: {
                         selectedPage: selectedPage,
-                        totalResults: _self.totalResults,
-                        totalPages: _self.totalPages,
-                        resultsPerPage: _self.resultsPerPage,
-                        currentPage: _self.currentPage
-                    });
-                    _self.currentPage = selectedPage;
-                    _self.render();
-                }
+                        selectedResultStart: selectedResultStart,
+                        selectedResultEnd: selectedResultEnd
+                    }
+                });
             });
-            this._eventHandlers.push(itemClick);
+            this._eventHandlers.push(pageClick);
         },
 
         _createMiddleItem: function (e) {
@@ -285,8 +290,12 @@ function (Evented, declare, domConstruct, i18n, on, query, template, _OnDijitCli
                 listClass = this._selectedClass;
             }
             // page list item
-            return '<li tabindex="0" title="' + this._i18n.pagination.page + ' ' + number.format(e.index) + '" data-page="' + e.index + '" class="' + this._itemClass + ' ' + this._itemMiddleClass + ' ' + listClass + '"><div><span>' + number.format(e.index) + '</span></div></li>';
+            return '<li role="button" tabindex="0" title="' + this._i18n.pagination.page + ' ' + number.format(e.index) + '" data-page="' + e.index + '" class="' + this._itemClass + ' ' + this._itemMiddleClass + ' ' + listClass + '"><div><span>' + number.format(e.index) + '</span></div></li>';
         }
 
+    });
+    ready(function(){
+        // Call the parser manually so it runs after our widget is defined, and page has finished loading
+        parser.parse();
     });
 });
