@@ -219,6 +219,11 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
             _self._html += '<div class="' + _self._clearClass + '"></div>';
             // insert into html
             _self.containerNode.innerHTML = _self._html;
+            // remove loading class
+            query(_self.containerNode).removeClass(_self._loadingClass);
+            // not disabled anymore
+            _self.disabled = false;
+            // call render event
             _self.emit("render", {});
         },
 
@@ -229,12 +234,14 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
 		_createMiddleItem: function (e) {
             // class
             var listClass = this._itemEnabledClass;
+            var dataPage = 'data-page="' + e.index + '"';
             if (e.index === e.currentIndex) {
                 // if selected
                 listClass = this._selectedClass;
+                dataPage = '';
             }
             // page list item
-            return '<li role="button" tabindex="0" title="' + this._i18n.pagination.pageTitle + ' ' + number.format(e.index) + '" data-page="' + e.index + '" class="' + this._itemClass + ' ' + this._itemMiddleClass + ' ' + listClass + '"><div><span>' + number.format(e.index) + '</span></div></li>';
+            return '<li role="button" tabindex="0" title="' + this._i18n.pagination.pageTitle + ' ' + number.format(e.index) + '" ' + dataPage + ' class="' + this._itemClass + ' ' + this._itemMiddleClass + ' ' + listClass + '"><div><span>' + number.format(e.index) + '</span></div></li>';
         },
 		
         // default settings
@@ -258,6 +265,8 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
             // connections
             this._eventHandlers = [];
             // css classes
+            this._containerClass = 'pagDijitContainer';
+            this._loadingClass = 'pagDijitLoading';
             this._selectedClass = 'pagDijitSelected';
             this._newSelectedClass = 'pagDijitNewSelected';
 			this._itemClass = 'pagDijitItem';
@@ -275,8 +284,14 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
             var _self = this;
             var pageClick = on(_self.containerNode, '[data-page]:click', function (evt) {
 				if(!_self.disabled){
+                    // disable more clicking for now
+                    _self.disabled = true;
+                    // remove selected class
+                    query('.pagDijitItem', _self.containerNode).removeClass(_self._selectedClass);
 					// add selected class
-					query(this).addClass(this._newSelectedClass);
+					query(this).addClass(_self._newSelectedClass);
+                    // add loading class to container
+                    query(_self.containerNode).addClass(_self._loadingClass);
 					// get offset number
 					var selectedPage = parseInt(dojo.query(this).attr('data-page')[0], 10);
 					var selectedResultStart = selectedPage * _self.resultsPerPage;

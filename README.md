@@ -38,19 +38,22 @@ myApp.Pagination(options? [Optional Object], srcNode [Required DOM Element])
 - **load** void. Occurs when the widget is loaded.
 - **render** void. Occurs when the render method has been called.
 - **page** Event Object. Event fires when a new page has been selected.
-	```javascript
-    {
-        bubbles: false,
-        cancelable: false,
-        detail: {
-            selectedPage: [Page Number Selected],
-            selectedResultStart: [Page Offset],
-            selectedResultEnd: [Page Offset + resultsPerPage]
-        }
+
+```javascript
+{
+    bubbles: false,
+    cancelable: false,
+    detail: {
+        selectedPage: [Page Number Selected],
+        selectedResultStart: [Page Offset],
+        selectedResultEnd: [Page Offset + resultsPerPage]
     }
-	```
+}
+```
     
 ## CSS Classes
+- pagDijitContainer
+- pagDijitLoading
 - pagDijitSelected
 - pagDijitNewSelected
 - pagDijitItem
@@ -68,17 +71,11 @@ myApp.Pagination(options? [Optional Object], srcNode [Required DOM Element])
 ### Sample 1
 ```javascript
 var Pagination = new myApp.Pagination({
-	totalResults: 100
+    totalResults: 100
 }, dojo.byId('pagination'));
 on(Pagination, "page", function(evt){
-	// add loading spinner here
-	// showSpinner();
-
-	// load your next results
-	// getResults();
-
-	// set selected page
-	this.set('currentPage', evt.detail.selectedPage);
+    // set selected page
+    this.set('currentPage', evt.detail.selectedPage);
 });
 Pagination.startup();
 ```
@@ -109,6 +106,22 @@ var Pagination3 = new myApp.Pagination({
 on(Pagination3, "page", function(evt){
 	this.set('currentPage', evt.detail.selectedPage);
 });
+```
+
+### Sample 4
+```javascript
+var Pagination4 = new myApp.Pagination({
+    totalResults: 500,
+    resultsPerPage: 25
+}, dojo.byId('pagination4'));
+on(Pagination4, "page", function(evt){
+    var selectedPage = evt.detail.selectedPage;
+    // change page after a second
+    setTimeout(function(){
+        Pagination4.set('currentPage', selectedPage);
+    }, 1000);
+});
+Pagination4.startup();
 ```
 
 ## License
