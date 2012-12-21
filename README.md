@@ -1,6 +1,10 @@
 # dijit-pagination-js 0.1
 A Dijit for pagination
 
+[View it live](http://driskull.github.com/dijit-pagination-js/)
+
+![App](https://raw.github.com/driskull/dijit-pagination-js/master/Pagination.png)
+
 ## Description
 This Dojo widget renders a pagination list in the DOM element of yoour choosing so you can easily paginate your results.
 
