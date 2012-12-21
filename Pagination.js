@@ -13,7 +13,7 @@ define([
     "dojo/number"],
 
 function (declare, parser, ready, Evented, domConstruct, i18n, on, query, template, _TemplatedMixin, _WidgetBase, number) {
-    declare("myApp.Pagination", [_WidgetBase, _TemplatedMixin, Evented], {
+    var Pagination = declare("myApp.Pagination", [_WidgetBase, _TemplatedMixin, Evented], {
         // put methods, attributes, etc. here
 
         // dijit HTML
@@ -314,4 +314,5 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
         // Call the parser manually so it runs after our widget is defined, and page has finished loading
         parser.parse();
     });
+    return Pagination;
 });
