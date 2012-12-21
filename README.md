@@ -39,17 +39,17 @@ myApp.Pagination(options? [Optional Object], srcNode [Required DOM Element])
 - **render** void. Occurs when the render method has been called.
 - **page** Event Object. Event fires when a new page has been selected.
 	```javascript
-	{
-		bubbles: false,
-		cancelable: false,
-		detail: {
-			selectedPage: [Page Number Selected],
-			selectedResultStart: [Page Offset],
-			selectedResultEnd: [Page Offset + resultsPerPage]
-		}
-	}
+    {
+        bubbles: false,
+        cancelable: false,
+        detail: {
+            selectedPage: [Page Number Selected],
+            selectedResultStart: [Page Offset],
+            selectedResultEnd: [Page Offset + resultsPerPage]
+        }
+    }
 	```
-	
+    
 ## CSS Classes
 - pagDijitSelected
 - pagDijitNewSelected

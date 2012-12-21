@@ -45,12 +45,22 @@
 				totalResults: 100
 			}, dojo.byId('pagination'));
 			on(Pagination, "page", function(evt){
-				// add loading spinner here
-				// showSpinner();
-
-				// load your next results
-				// getResults();
-
+                // Something you could do:
+                /*
+                    var _self = this;
+                    
+                    show_your_loading_spinner();
+                    
+                    // load your next results
+                    get_your_results(evt.detail.selectedPage, function(){
+                        hide_your_loading_spinner();
+                        
+                        // set selected page
+                        _self.set('currentPage', evt.detail.selectedPage);
+                        
+                    });
+                    
+                */
 				// set selected page
 				this.set('currentPage', evt.detail.selectedPage);
 			});
@@ -90,32 +100,48 @@
     <div id="pagination"></div>
     <pre>
 	var Pagination = new myApp.Pagination({
-		totalResults: 100
-	}, dojo.byId('pagination'));
+        totalResults: 100
+    }, dojo.byId('pagination'));
+    on(Pagination, "page", function(evt){
+        // add loading spinner here
+        // showSpinner();
+
+        // load your next results
+        // getResults();
+
+        // set selected page
+        this.set('currentPage', evt.detail.selectedPage);
+    });
+    Pagination.startup();
 	</pre>
     <h2>Example 2</h2>
     <div id="pagination2"></div>
     <pre>
 	var Pagination2 = new myApp.Pagination({
-		totalResults: 900,
-		resultsPerPage: 10,
-		currentPage: 1,
-		pagesPerSide: 1,
-		showPreviousNext: false
-	}, dojo.byId('pagination2'));
-	Pagination2.startup();
+        totalResults: 900,
+        resultsPerPage: 10,
+        currentPage: 1,
+        pagesPerSide: 1,
+        showPreviousNext: false
+    }, dojo.byId('pagination2'));
+    on(Pagination2, "page", function(evt){
+        this.set('currentPage', evt.detail.selectedPage);
+    });
 	</pre>
     <h2>Example 3</h2>
     <div id="pagination3"></div>
     <pre>
 	var Pagination3 = new myApp.Pagination({
-		totalResults: 225,
-		resultsPerPage: 5,
-		currentPage: 7,
-		pagesPerSide: 3,
-		showFirstLast: false
-	}, dojo.byId('pagination3'));
-	Pagination3.startup();
+        totalResults: 225,
+        resultsPerPage: 5,
+        currentPage: 7,
+        pagesPerSide: 3,
+        showFirstLast: false
+    }, dojo.byId('pagination3'));
+    on(Pagination3, "page", function(evt){
+        this.set('currentPage', evt.detail.selectedPage);
+    });
+    Pagination3.startup();
 	</pre>
 </body>
 </html>
