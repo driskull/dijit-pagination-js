@@ -1,5 +1,6 @@
 .dojoPage {
     margin: 20px 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .dojoPage ul {
@@ -7,12 +8,12 @@
     margin: 0;
     padding: 0;
     -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
-  *zoom: 1;
-  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-     -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    *zoom: 1;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .dojoPage li {
@@ -28,21 +29,15 @@
 .dojoPage .pagDijitItem {
     margin: 0;
     padding: 4px 12px;
-  line-height: 20px;
+    line-height: 20px;
     font-size: 14px;
-    color:#08C;
-
+    color: #08C;
     cursor: pointer;
-
     text-decoration: none;
     background-color: #fff;
     border: 1px solid #DDD;
     border-left-width: 0;
-
-
-    min-width: 35px;
     text-align: center;
-
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
@@ -50,53 +45,57 @@
     outline: 0;
 }
 
+.dojoPage .pagDijitItem span {
+    min-width: 32px;
+    display: inline-block;
+}
 
-.dojoPage .pagDijitItem:first-child{
-  border-left-width: 1px;
-  -webkit-border-bottom-left-radius: 4px;
-          border-bottom-left-radius: 4px;
-  -webkit-border-top-left-radius: 4px;
-          border-top-left-radius: 4px;
-  -moz-border-radius-bottomleft: 4px;
-  -moz-border-radius-topleft: 4px;
+.dojoPage .pagDijitItem:first-child {
+    border-left-width: 1px;
+    -webkit-border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    -webkit-border-top-left-radius: 4px;
+    border-top-left-radius: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    -moz-border-radius-topleft: 4px;
 }
 
 .dojoPage .pagDijitItem:last-child {
-  -webkit-border-top-right-radius: 4px;
-          border-top-right-radius: 4px;
-  -webkit-border-bottom-right-radius: 4px;
-          border-bottom-right-radius: 4px;
-  -moz-border-radius-topright: 4px;
-  -moz-border-radius-bottomright: 4px;
+    -webkit-border-top-right-radius: 4px;
+    border-top-right-radius: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-bottomright: 4px;
 }
-
-
-
 
 .dojoPage .pagDijitItem:hover, .dojoPage .pagDijitItem:focus {
     background-color: #f5f5f5;
     color: #08C;
+    -webkit-transition: background-color 0.25s ease-in;
+    -moz-transition: background-color 0.25s ease-in;
+    -o-transition: background-color 0.25s ease-in;
+    transition: background-color 0.25s ease-in;
 }
 
-.dojoPage .pagDijitItem:active{
+.dojoPage .pagDijitItem:active {
     color: #999999;
-  cursor: default;
+    cursor: default;
 }
 
 .dojoPage .pagDijitSelected, .dojoPage .pagDijitSelected:hover, .dojoPage .pagDijitSelected:focus {
     cursor: default;
-    background-color: #f5f5f5;
-    color: #999999;
+    background-color: #08C;
+    color: #fff;
 }
-
 
 .dojoPage .pagDijitItemDisabled, .dojoPage .pagDijitItemDisabled:hover, .dojoPage .pagDijitItemDisabled:focus {
-    color: #999999;
-  cursor: default;
-  background-color: transparent;
+    color: #ddd;
+    cursor: default;
+    background-color: #FAFAFA;
 }
 
-.dojoPage .pagDijitClear{
+.dojoPage .pagDijitClear {
     clear: both;
     display: block;
     overflow: hidden;

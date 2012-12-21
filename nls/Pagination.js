@@ -5,10 +5,10 @@ define({
 			"previousTitle":"Previous",
 			"next": "&raquo;",
 			"nextTitle":"Next",
-			"first": "First Page",
-			"last": "Last Page",
+			"firstTitle": "First Page",
+			"lastTitle": "Last Page",
 			"helip": "&hellip;",
-			"page": "Page"
+			"pageTitle": "Page"
 		}
     }),
     "ar": 1,

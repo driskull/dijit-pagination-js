@@ -130,14 +130,14 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
                 if (_self.showFirstLast) {
                     // pagination first page
                     if(_self._currentIndex > (_self.pagesPerSide + 1)){
-                        _self._startHTML += '<li role="button" tabindex="0" class="' + _self._itemClass + ' ' + _self._itemFirstClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.first + '" data-page="' + _self._firstPage + '"><div><span>' + number.format(_self._firstPage) + _self._helipText + '</span></div></li>';
+                        _self._startHTML += '<li role="button" tabindex="0" class="' + _self._itemClass + ' ' + _self._itemFirstClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.firstTitle + '" data-page="' + _self._firstPage + '"><div><span>' + number.format(_self._firstPage) + _self._helipText + '</span></div></li>';
                     }
                     else {
                         _self._middleCount = _self._middleCount - 1;
                     }
                     // pagination last page
                     if(_self._currentIndex < (_self.totalPages - _self.pagesPerSide)){
-                        _self._endHTML += '<li role="button" tabindex="0" class="' + _self._itemClass + ' ' + _self._itemLastClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.last + ' (' + number.format(_self.totalPages) + ')" data-page="' + _self.totalPages + '"><div><span>' + _self._helipText + number.format(_self.totalPages) + '</span></div></li>';
+                        _self._endHTML += '<li role="button" tabindex="0" class="' + _self._itemClass + ' ' + _self._itemLastClass + ' ' + _self._itemEnabledClass + '" title="' + _self._i18n.pagination.lastTitle + ' (' + number.format(_self.totalPages) + ')" data-page="' + _self.totalPages + '"><div><span>' + _self._helipText + number.format(_self.totalPages) + '</span></div></li>';
                     }
                     else {
                         _self._middleCount = _self._middleCount - 1;
@@ -225,7 +225,18 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
         /* ---------------- */
         /* Private Functions */
         /* ---------------- */
-
+		
+		_createMiddleItem: function (e) {
+            // class
+            var listClass = this._itemEnabledClass;
+            if (e.index === e.currentIndex) {
+                // if selected
+                listClass = this._selectedClass;
+            }
+            // page list item
+            return '<li role="button" tabindex="0" title="' + this._i18n.pagination.pageTitle + ' ' + number.format(e.index) + '" data-page="' + e.index + '" class="' + this._itemClass + ' ' + this._itemMiddleClass + ' ' + listClass + '"><div><span>' + number.format(e.index) + '</span></div></li>';
+        },
+		
         // default settings
         _setPublicDefaults: function () {
             // Create public defaults here
@@ -263,6 +274,7 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
         _createEventHandlers: function () {
             var _self = this;
             var pageClick = on(_self.containerNode, '[data-page]:click', function (evt) {
+				// add selected class
                 query(this).addClass(this._newSelectedClass);
                 // get offset number
                 var selectedPage = parseInt(dojo.query(this).attr('data-page')[0], 10);
@@ -280,17 +292,6 @@ function (declare, parser, ready, Evented, domConstruct, i18n, on, query, templa
                 });
             });
             this._eventHandlers.push(pageClick);
-        },
-
-        _createMiddleItem: function (e) {
-            // class
-            var listClass = this._itemEnabledClass;
-            if (e.index === e.currentIndex) {
-                // if selected
-                listClass = this._selectedClass;
-            }
-            // page list item
-            return '<li role="button" tabindex="0" title="' + this._i18n.pagination.page + ' ' + number.format(e.index) + '" data-page="' + e.index + '" class="' + this._itemClass + ' ' + this._itemMiddleClass + ' ' + listClass + '"><div><span>' + number.format(e.index) + '</span></div></li>';
         }
 
     });
