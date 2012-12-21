@@ -17,6 +17,10 @@
     };
     </script>
     <style>
+    body{
+        margin:30px 60px;
+        padding:20px;
+    }
 	pre{
 		border: 1px solid #cacaca;
 		line-height: 1.2em;
@@ -37,19 +41,19 @@
     <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.2/dojo/dojo.js"></script>
     <link charset="utf-8" href="css/Pagination.css" media="screen" rel="stylesheet" type="text/css">
     <script>
-	require(["dojo/ready", "dojo/on", "myApp/Pagination"], function(ready, on){
+	require(["dojo/ready", "dojo/on", "myApp/Pagination"], function(ready, on, Pagination){
 		ready(function(){
 			// 1
-			var Pagination = new myApp.Pagination({
+			var Pagination1 = new Pagination({
 				totalResults: 100
-			}, dojo.byId('pagination'));
-			on(Pagination, "page", function(evt){
+			}, dojo.byId('pagination1'));
+			on(Pagination1, "page", function(evt){
 				// set selected page
 				this.set('currentPage', evt.detail.selectedPage);
 			});
-			Pagination.startup();
+			Pagination1.startup();
 			// 2
-			var Pagination2 = new myApp.Pagination({
+			var Pagination2 = new Pagination({
 				totalResults: 900,
 				resultsPerPage: 10,
 				currentPage: 1,
@@ -61,7 +65,7 @@
 			});
 			Pagination2.startup();
 			// 3
-			var Pagination3 = new myApp.Pagination({
+			var Pagination3 = new Pagination({
 				totalResults: 225,
 				resultsPerPage: 5,
 				currentPage: 7,
@@ -73,7 +77,7 @@
 			});
 			Pagination3.startup();
             // 4
-			var Pagination4 = new myApp.Pagination({
+			var Pagination4 = new Pagination({
 				totalResults: 500,
 				resultsPerPage: 25
 			}, dojo.byId('pagination4'));
@@ -93,21 +97,21 @@
     <h1>dijit-pagination-js</h1>
     <p><a href="https://github.com/driskull/dijit-pagination-js">Github page</a> with documentation and more information on how to use this widget.</p>
     <h2 id="ex1">Example 1</h2>
-    <div id="pagination"></div>
+    <div id="pagination1"></div>
     <pre>
-	var Pagination = new myApp.Pagination({
+	var Pagination1 = new Pagination({
         totalResults: 100
-    }, dojo.byId('pagination'));
-    on(Pagination, "page", function(evt){
+    }, dojo.byId('pagination1'));
+    on(Pagination1, "page", function(evt){
         // set selected page
         this.set('currentPage', evt.detail.selectedPage);
     });
-    Pagination.startup();
+    Pagination1.startup();
 	</pre>
     <h2 id="ex2">Example 2</h2>
     <div id="pagination2"></div>
     <pre>
-	var Pagination2 = new myApp.Pagination({
+	var Pagination2 = new Pagination({
         totalResults: 900,
         resultsPerPage: 10,
         currentPage: 1,
@@ -121,7 +125,7 @@
     <h2 id="ex3">Example 3</h2>
     <div id="pagination3"></div>
     <pre>
-	var Pagination3 = new myApp.Pagination({
+	var Pagination3 = new Pagination({
         totalResults: 225,
         resultsPerPage: 5,
         currentPage: 7,
@@ -136,7 +140,7 @@
     <h2 id="ex4">Example 4</h2>
     <div id="pagination4"></div>
     <pre>
-	var Pagination4 = new myApp.Pagination({
+	var Pagination4 = new Pagination({
         totalResults: 500,
         resultsPerPage: 25
     }, dojo.byId('pagination4'));

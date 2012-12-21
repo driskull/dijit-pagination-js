@@ -36,27 +36,27 @@ Include Dojo and your style for pagination
 Require the widget and set up your pagination
 ```html
 <script>
-require(["dojo/ready", "dojo/on", "myApp/Pagination"], function(ready, on){
+require(["dojo/ready", "dojo/on", "myApp/Pagination"], function(ready, on, Pagination){
     ready(function(){
-        var Pagination = new myApp.Pagination({
+        var Pagination1 = new Pagination({
             totalResults: 100
-        }, dojo.byId('pagination'));
-        on(Pagination, "page", function(evt){
+        }, dojo.byId('pagination1'));
+        on(Pagination1, "page", function(evt){
             // set selected page
             this.set('currentPage', evt.detail.selectedPage);
         });
-        Pagination.startup();
+        Pagination1.startup();
 });
 </script>
 ```
 
 // Add the element to your HTML body
 ```html
-<div id="pagination"></div>
+<div id="pagination1"></div>
 ```
 
 ## Constructor
-myApp.Pagination(options? [Optional Object], srcNode [Required DOM Element])
+Pagination(options? [Optional Object], srcNode [Required DOM Element])
 - **totalResults** (required) [Number] Number of results for whatever you're paginating. Default: 0.
 - **resultsPerPage** (optional) [Number] How many results are you showing per page? Default: 10.
 - **currentPage** (optional) [Number] Current page you're on. Usually you'll start at 0. Default: 0.
@@ -123,21 +123,21 @@ myApp.Pagination(options? [Optional Object], srcNode [Required DOM Element])
 Simple example that just changes the page after a new page is selected.
 [View demo](http://driskull.github.com/dijit-pagination-js/#ex1)
 ```javascript
-var Pagination = new myApp.Pagination({
+var Pagination1 = new Pagination({
     totalResults: 100
-}, dojo.byId('pagination'));
-on(Pagination, "page", function(evt){
+}, dojo.byId('pagination1'));
+on(Pagination1, "page", function(evt){
     // set selected page
     this.set('currentPage', evt.detail.selectedPage);
 });
-Pagination.startup();
+Pagination1.startup();
 ```
 
 ### Sample 2
 Show options and previous and next buttons can be disabled.
 [View demo](http://driskull.github.com/dijit-pagination-js/#ex2)
 ```javascript
-var Pagination2 = new myApp.Pagination({
+var Pagination2 = new Pagination({
 	totalResults: 900,
 	resultsPerPage: 10,
 	currentPage: 1,
@@ -153,7 +153,7 @@ on(Pagination2, "page", function(evt){
 Show options and first and last page buttons can be disabled.
 [View demo](http://driskull.github.com/dijit-pagination-js/#ex3)
 ```javascript
-var Pagination3 = new myApp.Pagination({
+var Pagination3 = new Pagination({
 	totalResults: 225,
 	resultsPerPage: 5,
 	currentPage: 7,
@@ -169,7 +169,7 @@ on(Pagination3, "page", function(evt){
 Demonstrate the loading style which will show when fetching new items to show before re-rendering.
 [View demo](http://driskull.github.com/dijit-pagination-js/#ex4)
 ```javascript
-var Pagination4 = new myApp.Pagination({
+var Pagination4 = new Pagination({
     totalResults: 500,
     resultsPerPage: 25
 }, dojo.byId('pagination4'));
