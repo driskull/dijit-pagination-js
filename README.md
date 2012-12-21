@@ -4,6 +4,53 @@ A Dijit for pagination
 ## Description
 This Dojo widget renders a pagination list in the DOM element of yoour choosing so you can easily paginate your results.
 
+## Getting Started
+
+Add dojo config to your HTML head
+```html
+<script>
+// host path regular expression
+var pathRegex = new RegExp(/\/[^\/]+$/);
+var locationPath = location.pathname.replace(pathRegex, '');
+// Dojo Config
+var dojoConfig = {
+    parseOnLoad: true,
+    packages: [{
+        name: "myApp",
+        location: locationPath
+    }]
+};
+</script>
+```
+
+Include Dojo and your style for pagination
+```html
+<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3" type="text/javascript"></script>
+<link charset="utf-8" href="css/Pagination.css" media="screen" rel="stylesheet" type="text/css">
+```
+
+Require the widget and set up your pagination
+```html
+<script>
+require(["dojo/ready", "dojo/on", "myApp/Pagination"], function(ready, on){
+    ready(function(){
+        var Pagination = new myApp.Pagination({
+            totalResults: 100
+        }, dojo.byId('pagination'));
+        on(Pagination, "page", function(evt){
+            // set selected page
+            this.set('currentPage', evt.detail.selectedPage);
+        });
+        Pagination.startup();
+});
+</script>
+```
+
+// Add the element to your HTML body
+```html
+<div id="pagination"></div>
+```
+
 ## Constructor
 myApp.Pagination(options? [Optional Object], srcNode [Required DOM Element])
 - **totalResults** (required) [Number] Number of results for whatever you're paginating. Default: 0.
@@ -69,6 +116,7 @@ myApp.Pagination(options? [Optional Object], srcNode [Required DOM Element])
 ## Samples
 
 ### Sample 1
+Simple example that just changes the page after a new page is selected
 ```javascript
 var Pagination = new myApp.Pagination({
     totalResults: 100
@@ -81,6 +129,7 @@ Pagination.startup();
 ```
 
 ### Sample 2
+Show options and previous and next buttons can be disabled.
 ```javascript
 var Pagination2 = new myApp.Pagination({
 	totalResults: 900,
@@ -95,6 +144,7 @@ on(Pagination2, "page", function(evt){
 ```
 
 ### Sample 3
+Show options and first and last page buttons can be disabled.
 ```javascript
 var Pagination3 = new myApp.Pagination({
 	totalResults: 225,
@@ -109,6 +159,7 @@ on(Pagination3, "page", function(evt){
 ```
 
 ### Sample 4
+Demonstrate the loading style which will show when fetching new items to show before re-rendering.
 ```javascript
 var Pagination4 = new myApp.Pagination({
     totalResults: 500,
