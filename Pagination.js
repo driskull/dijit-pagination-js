@@ -4,10 +4,10 @@ define([
   "dojo/Evented",
   "dojo/dom-attr",
   "dojo/dom-class",
-  "dojo/i18n!./nls/Pagination.js",
+  "dojo/i18n!./Pagination/nls/Pagination.js",
   "dojo/on",
   "dojo/query",
-  "dojo/text!./templates/Pagination.html",
+  "dojo/text!./Pagination/templates/Pagination.html",
   "dijit/_TemplatedMixin",
   "dijit/_WidgetBase",
   "dojo/number"
