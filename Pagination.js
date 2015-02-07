@@ -2,7 +2,8 @@ define([
   "dojo/_base/declare",
   "dojo/_base/lang",
   "dojo/Evented",
-  "dojo/dom-construct",
+  "dojo/dom-attr",
+  "dojo/dom-class",
   "dojo/i18n!./nls/Pagination.js",
   "dojo/on",
   "dojo/query",
@@ -11,49 +12,101 @@ define([
   "dijit/_WidgetBase",
   "dojo/number"
 ],
-  function (declare, lang, Evented, domConstruct, i18n, on, query, template, _TemplatedMixin, _WidgetBase, number) {
+  function (declare, lang, Evented, domAttr, domClass, i18n, on, query, template, _TemplatedMixin, _WidgetBase, number) {
     var Pagination = declare([_WidgetBase, _TemplatedMixin, Evented], {
-      // put methods, attributes, etc. here
-
       // dijit HTML
       templateString: template,
-
+      declaredClass: "dijit.pagination",
       constructor: function (options, srcRefNode) {
-        // set default settings
-        this._setPublicDefaults();
+        // css class names
+        this.css = {
+          containerClass: 'pageDijitContainer',
+          selectedClass: 'pageDijitSelected',
+          newSelectedClass: 'pageDijitNewSelected',
+          listClass: "pageDijitList",
+          itemClass: 'pageDijitItem',
+          itemEnabledClass: 'pageDijitItemEnabled',
+          itemDisabledClass: 'pageDijitItemDisabled',
+          itemMiddleClass: 'pageDijitItemMiddle',
+          itemFirstClass: 'pageDijitItemFirst',
+          itemLastClass: 'pageDijitItemLast',
+          itemPreviousClass: 'pageDijitItemPrevious',
+          itemNextClass: 'pageDijitItemNext',
+          clearClass: 'pageDijitClear'
+        };
+        // defaults
+        this.options = {
+          totalResults: 0,
+          resultsPerPage: 10,
+          currentPage: 0,
+          pagesPerSide: 2,
+          showPreviousNext: true,
+          showFirstLast: true,
+          nextCharacter: i18n.pagination.next,
+          previousCharacter: i18n.pagination.previous,
+          helip: i18n.pagination.helip,
+          theme: "dojoPage"
+        };
         // mix in settings and defaults
-        declare.safeMixin(this, options);
-        // private variables
-        this._setPrivateDefaults();
-        // watch updates of public properties and update the widget accordingly
-        this.watch("totalResults", this.render);
-        this.watch("resultsPerPage", this.render);
-        this.watch("currentPage", this.render);
-        this.watch("pagesPerSide", this.render);
-        this.watch("showPreviousNext", this.render);
-        this.watch("showFirstLast", this.render);
+        var defaults = lang.mixin({}, this.options, options);
+        // properties
+        this.set("theme", defaults.theme);
+        this.set("nextCharacter", defaults.nextCharacter);
+        this.set("previousCharacter", defaults.previousCharacter);
+        this.set("helip", defaults.helip);
+        this.set("totalResults", defaults.totalResults);
+        this.set("resultsPerPage", defaults.resultsPerPage);
+        this.set("currentPage", defaults.currentPage);
+        this.set("pagesPerSide", defaults.pagesPerSide);
+        this.set("showPreviousNext", defaults.showPreviousNext);
+        this.set("showFirstLast", defaults.showFirstLast);
         // containing node
         this.domNode = srcRefNode;
+        // Internationalization
+        this._i18n = i18n;
       },
       /* ---------------- */
       /* Public Functions */
       /* ---------------- */
       // start widget
       startup: function () {
-        if (!this.domNode) {
-          console.log('Pagination:: Error - domNode is undefined.');
-          return;
-        }
         // create pagination links
         this.render();
         // set widget ready
-        this.loaded = true;
+        this.set("loaded", true);
         this.emit("load", {});
       },
 
       postCreate: function () {
         // setup connections
-        this._createEventHandlers();
+        this.own(on(this.listNode, '[data-page]:click', lang.hitch(this, function (evt) {
+          if (!this.disabled) {
+            var target = evt.target;
+            // disable more clicking for now
+            this.set("disabled", true);
+            // all selected items
+            var items = query('.' + this.css.selectedClass, this.listNode);
+            // remove selected class
+            for (var i = 0; i < items.length; i++) {
+              domClass.remove(items[i], this.css.selectedClass);
+            }
+            // add selected class
+            domClass.add(target, this.css.newSelectedClass);
+            // get offset number
+            var pg = domAttr.get(target, "data-page");
+            var selectedPage = parseInt(pg, 10);
+            var selectedResultStart = selectedPage * this.resultsPerPage;
+            var selectedResultEnd = selectedResultStart + this.resultsPerPage;
+            // set new page
+            this.set('currentPage', selectedPage);
+            // event
+            this.emit("page", {
+              selectedPage: selectedPage,
+              selectedResultStart: selectedResultStart,
+              selectedResultEnd: selectedResultEnd
+            });
+          }
+        })));
       },
 
       render: function () {
@@ -73,8 +126,6 @@ define([
         this.currentResultEnd = this.currentResultStart + this.resultsPerPage;
         // if pagination is necessary
         if (this.resultsPerPage && (this.totalResults > this.resultsPerPage)) {
-          // create pagination list
-          this._html += '<ul role="presentation">';
           // determine offset links
           if (this.currentPage) {
             this._currentIndex = parseInt(this.currentPage, 10);
@@ -101,38 +152,38 @@ define([
           }
           // pagination previous
           if (this.showPreviousNext) {
-            var firstClass = this._itemDisabledClass,
+            var firstClass = this.css.itemDisabledClass,
               firstOffset = '';
             if (this._currentIndex > 1) {
-              firstClass = this._itemEnabledClass;
+              firstClass = this.css.itemEnabledClass;
               firstOffset = 'data-page="' + this._previousPage + '"';
             }
-            this._startHTML += '<li role="button" tabindex="0" title="' + this._i18n.pagination.previousTitle + '" class="' + this._itemClass + ' ' + this._itemPreviousClass + ' ' + firstClass + '" ' + firstOffset + '><div><span>' + this._i18n.pagination.previous + '</span></div></li>';
+            this._startHTML += '<li role="button" tabindex="0" title="' + this._i18n.pagination.previousTitle + '" class="' + this.css.itemClass + ' ' + this.css.itemPreviousClass + ' ' + firstClass + '" ' + firstOffset + '>' + this.previousCharacter + '</li>';
           }
           // always show first and last pages
           if (this.showFirstLast) {
             // pagination first page
             if (this._currentIndex > (this.pagesPerSide + 1)) {
-              this._startHTML += '<li role="button" tabindex="0" class="' + this._itemClass + ' ' + this._itemFirstClass + ' ' + this._itemEnabledClass + '" title="' + this._i18n.pagination.firstTitle + '" data-page="' + this._firstPage + '"><div><span>' + number.format(this._firstPage) + this._helipText + '</span></div></li>';
+              this._startHTML += '<li role="button" tabindex="0" class="' + this.css.itemClass + ' ' + this.css.itemFirstClass + ' ' + this.css.itemEnabledClass + '" title="' + this._i18n.pagination.firstTitle + '" data-page="' + this._firstPage + '">' + number.format(this._firstPage) + this._helipText + '</li>';
             } else {
               this._middleCount = this._middleCount - 1;
             }
             // pagination last page
             if (this._currentIndex < (this.totalPages - this.pagesPerSide)) {
-              this._endHTML += '<li role="button" tabindex="0" class="' + this._itemClass + ' ' + this._itemLastClass + ' ' + this._itemEnabledClass + '" title="' + this._i18n.pagination.lastTitle + ' (' + number.format(this.totalPages) + ')" data-page="' + this.totalPages + '"><div><span>' + this._helipText + number.format(this.totalPages) + '</span></div></li>';
+              this._endHTML += '<li role="button" tabindex="0" class="' + this.css.itemClass + ' ' + this.css.itemLastClass + ' ' + this.css.itemEnabledClass + '" title="' + this._i18n.pagination.lastTitle + ' (' + number.format(this.totalPages) + ')" data-page="' + this.totalPages + '">' + this._helipText + number.format(this.totalPages) + '</li>';
             } else {
               this._middleCount = this._middleCount - 1;
             }
           }
           // pagination next
           if (this.showPreviousNext) {
-            var lastClass = this._itemDisabledClass,
+            var lastClass = this.css.itemDisabledClass,
               lastOffset = '';
             if (this._currentIndex < this.totalPages) {
-              lastClass = this._itemEnabledClass;
+              lastClass = this.css.itemEnabledClass;
               lastOffset = 'data-page="' + this._nextPage + '"';
             }
-            this._endHTML += '<li role="button" tabindex="0" title="' + this._i18n.pagination.nextTitle + '" class="' + this._itemClass + ' ' + this._itemNextClass + ' ' + lastClass + '" ' + lastOffset + '><div><span>' + this._i18n.pagination.next + '</span></div></li>';
+            this._endHTML += '<li role="button" tabindex="0" title="' + this._i18n.pagination.nextTitle + '" class="' + this.css.itemClass + ' ' + this.css.itemNextClass + ' ' + lastClass + '" ' + lastOffset + '>' + this.nextCharacter + '</li>';
           }
           // create each pagination item
           for (var i = 1; i <= this.totalPages; i++) {
@@ -194,16 +245,11 @@ define([
           }
           // add up HTML
           this._html += this._startHTML + this._middleHTML + this._endHTML;
-          // end pagination
-          this._html += '</ul>';
         }
-        this._html += '<div class="' + this._clearClass + '"></div>';
         // insert into html
-        this.containerNode.innerHTML = this._html;
-        // remove loading class
-        query(this.containerNode).removeClass(this._loadingClass);
+        this.listNode.innerHTML = this._html;
         // not disabled anymore
-        this.disabled = false;
+        this.set("disabled", false);
         // call render event
         this.emit("render", {});
       },
@@ -214,78 +260,83 @@ define([
 
       _createMiddleItem: function (e) {
         // class
-        var listClass = this._itemEnabledClass;
+        var listClass = this.css.itemEnabledClass;
         var dataPage = 'data-page="' + e.index + '"';
         if (e.index === e.currentIndex) {
           // if selected
-          listClass = this._selectedClass;
+          listClass = this.css.selectedClass;
           dataPage = '';
         }
         // page list item
-        return '<li role="button" tabindex="0" title="' + this._i18n.pagination.pageTitle + ' ' + number.format(e.index) + '" ' + dataPage + ' class="' + this._itemClass + ' ' + this._itemMiddleClass + ' ' + listClass + '"><div><span>' + number.format(e.index) + '</span></div></li>';
+        return '<li role="button" tabindex="0" title="' + this._i18n.pagination.pageTitle + ' ' + number.format(e.index) + '" ' + dataPage + ' class="' + this.css.itemClass + ' ' + this.css.itemMiddleClass + ' ' + listClass + '">' + number.format(e.index) + '</li>';
       },
 
-      // default settings
-      _setPublicDefaults: function () {
-        // Create public defaults here
-        this.totalResults = 0;
-        this.resultsPerPage = 10;
-        this.currentPage = 0;
-        // options
-        this.pagesPerSide = 2;
-        this.showPreviousNext = true;
-        this.showFirstLast = true;
-        this.helip = i18n.pagination.helip;
-        this.theme = 'dojoPage';
+      _setTotalResultsAttr: function (newVal) {
+        this.totalResults = newVal;
+        if (this._created) {
+          this.render();
+        }
       },
 
-      // set variables that aren't to be modified
-      _setPrivateDefaults: function () {
-        // Internationalization
-        this._i18n = i18n;
-        // css classes
-        this._containerClass = 'pagDijitContainer';
-        this._loadingClass = 'pagDijitLoading';
-        this._selectedClass = 'pagDijitSelected';
-        this._newSelectedClass = 'pagDijitNewSelected';
-        this._itemClass = 'pagDijitItem';
-        this._itemEnabledClass = 'pagDijitItemEnabled';
-        this._itemDisabledClass = 'pagDijitItemDisabled';
-        this._itemMiddleClass = 'pagDijitItemMiddle';
-        this._itemFirstClass = 'pagDijitItemFirst';
-        this._itemLastClass = 'pagDijitItemLast';
-        this._itemPreviousClass = 'pagDijitItemPrevious';
-        this._itemNextClass = 'pagDijitItemNext';
-        this._clearClass = 'pagDijitClear';
+      _setResultsPerPageAttr: function (newVal) {
+        this.resultsPerPage = newVal;
+        if (this._created) {
+          this.render();
+        }
       },
 
-      _createEventHandlers: function () {
-        this.own(on(this.containerNode, '[data-page]:click', lang.hitch(this, function (evt) {
-          if (!this.disabled) {
-            // disable more clicking for now
-            this.disabled = true;
-            // remove selected class
-            query('.pagDijitItem', this.containerNode).removeClass(this._selectedClass);
-            // add selected class
-            query(evt.target).addClass(this._newSelectedClass);
-            // add loading class to container
-            query(this.containerNode).addClass(this._loadingClass);
-            // get offset number
-            var selectedPage = parseInt(query(evt.target).attr('data-page')[0], 10);
-            var selectedResultStart = selectedPage * this.resultsPerPage;
-            var selectedResultEnd = selectedResultStart + this.resultsPerPage;
-            // event
-            this.emit("page", {
-              bubbles: false,
-              cancelable: false,
-              detail: {
-                selectedPage: selectedPage,
-                selectedResultStart: selectedResultStart,
-                selectedResultEnd: selectedResultEnd
-              }
-            });
-          }
-        })));
+      _setCurrentPageAttr: function (newVal) {
+        this.currentPage = newVal;
+        if (this._created) {
+          this.render();
+        }
+      },
+
+      _setPagesPerSideAttr: function (newVal) {
+        this.pagesPerSide = newVal;
+        if (this._created) {
+          this.render();
+        }
+      },
+
+      _setShowPreviousNextAttr: function (newVal) {
+        this.showPreviousNext = newVal;
+        if (this._created) {
+          this.render();
+        }
+      },
+
+      _setThemeAttr: function (newVal) {
+        if (this._created) {
+          domClass.remove(this.domNode, this.theme);
+          domClass.add(this.domNode, newVal);
+        }
+        this.theme = newVal;
+      },
+
+      _setHelipAttr: function (newVal) {
+        this.helip = newVal;
+      },
+
+      _setNextCharacterAttr: function (newVal) {
+        this.nextCharacter = newVal;
+        if (this._created) {
+          this.render();
+        }
+      },
+
+      _setPreviousCharacterAttr: function (newVal) {
+        this.previousCharacter = newVal;
+        if (this._created) {
+          this.render();
+        }
+      },
+
+      _setShowFirstLastAttr: function (newVal) {
+        this.showFirstLast = newVal;
+        if (this._created) {
+          this.render();
+        }
       }
 
     });
