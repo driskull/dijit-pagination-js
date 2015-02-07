@@ -8,11 +8,11 @@ define([
   "dojo/on",
   "dojo/query",
   "dojo/text!./Pagination/templates/Pagination.html",
+  "dojo/number",
   "dijit/_TemplatedMixin",
-  "dijit/_WidgetBase",
-  "dojo/number"
+  "dijit/_WidgetBase"
 ],
-  function (declare, lang, Evented, domAttr, domClass, i18n, on, query, template, _TemplatedMixin, _WidgetBase, number) {
+  function (declare, lang, Evented, domAttr, domClass, i18n, on, query, template, number, _TemplatedMixin, _WidgetBase) {
     var Pagination = declare([_WidgetBase, _TemplatedMixin, Evented], {
       // dijit HTML
       templateString: template,
