@@ -42,18 +42,12 @@ define([
           pagesPerSide: 2,
           showPreviousNext: true,
           showFirstLast: true,
-          nextCharacter: i18n.pagination.next,
-          previousCharacter: i18n.pagination.previous,
-          helip: i18n.pagination.helip,
           theme: "dojoPage"
         };
         // mix in settings and defaults
         var defaults = lang.mixin({}, this.options, options);
         // properties
         this.set("theme", defaults.theme);
-        this.set("nextCharacter", defaults.nextCharacter);
-        this.set("previousCharacter", defaults.previousCharacter);
-        this.set("helip", defaults.helip);
         this.set("totalResults", defaults.totalResults);
         this.set("resultsPerPage", defaults.resultsPerPage);
         this.set("currentPage", defaults.currentPage);
@@ -121,7 +115,7 @@ define([
         this._npCount = 0;
         this._helipText = '';
         this._totalMiddlePages = (2 * this.pagesPerSide) + 1;
-        this._helipText = this.helip || "";
+        this._helipText = i18n.pagination.helip || "";
         this.currentResultStart = this.currentPage * this.resultsPerPage;
         this.currentResultEnd = this.currentResultStart + this.resultsPerPage;
         // if pagination is necessary
@@ -158,7 +152,7 @@ define([
               firstClass = this.css.itemEnabledClass;
               firstOffset = 'data-page="' + this._previousPage + '"';
             }
-            this._startHTML += '<li role="button" tabindex="0" title="' + this._i18n.pagination.previousTitle + '" class="' + this.css.itemClass + ' ' + this.css.itemPreviousClass + ' ' + firstClass + '" ' + firstOffset + '>' + this.previousCharacter + '</li>';
+            this._startHTML += '<li role="button" tabindex="0" title="' + this._i18n.pagination.previousTitle + '" class="' + this.css.itemClass + ' ' + this.css.itemPreviousClass + ' ' + firstClass + '" ' + firstOffset + '>' + i18n.pagination.previous + '</li>';
           }
           // always show first and last pages
           if (this.showFirstLast) {
@@ -183,7 +177,7 @@ define([
               lastClass = this.css.itemEnabledClass;
               lastOffset = 'data-page="' + this._nextPage + '"';
             }
-            this._endHTML += '<li role="button" tabindex="0" title="' + this._i18n.pagination.nextTitle + '" class="' + this.css.itemClass + ' ' + this.css.itemNextClass + ' ' + lastClass + '" ' + lastOffset + '>' + this.nextCharacter + '</li>';
+            this._endHTML += '<li role="button" tabindex="0" title="' + this._i18n.pagination.nextTitle + '" class="' + this.css.itemClass + ' ' + this.css.itemNextClass + ' ' + lastClass + '" ' + lastOffset + '>' + i18n.pagination.next + '</li>';
           }
           // create each pagination item
           for (var i = 1; i <= this.totalPages; i++) {
@@ -312,24 +306,6 @@ define([
           domClass.add(this.domNode, newVal);
         }
         this.theme = newVal;
-      },
-
-      _setHelipAttr: function (newVal) {
-        this.helip = newVal;
-      },
-
-      _setNextCharacterAttr: function (newVal) {
-        this.nextCharacter = newVal;
-        if (this._created) {
-          this.render();
-        }
-      },
-
-      _setPreviousCharacterAttr: function (newVal) {
-        this.previousCharacter = newVal;
-        if (this._created) {
-          this.render();
-        }
       },
 
       _setShowFirstLastAttr: function (newVal) {
