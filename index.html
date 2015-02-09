@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>dijit-pagination-js</title>
+  <script>
+    // host path regular expression
+    var pathRegex = new RegExp(/\/[^\/]+$/);
+    var locationPath = location.pathname.replace(pathRegex, '');
+    // Dojo Config
+    var dojoConfig = {
+      parseOnLoad: true,
+      packages: [{
+        name: "myApp",
+        location: locationPath
+  }]
+    };
+  </script>
+  <style>
+    body {
+      margin: 30px 60px;
+      padding: 20px;
+    }
+    
+    pre {
+      border: 1px solid #cacaca;
+      line-height: 1.2em;
+      font: 12px Monaco, "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+      padding: 10px;
+      overflow: auto;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      -moz-background-clip: padding;
+      -webkit-background-clip: padding-box;
+      background-clip: padding-box;
+      background-color: #FAFAFB;
+      color: #393939;
+      margin: 0px;
+    }
+    
+    .container {
+      padding: 20px 0 40px 0;
+    }
+  </style>
+  <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.2/dojo/dojo.js"></script>
+  <link charset="utf-8" href="Pagination/css/Pagination.css" media="screen" rel="stylesheet" type="text/css">
+  <script>
+    require(["dojo/ready", "dojo/on", "myApp/Pagination"], function (ready, on, Pagination) {
+      ready(function () {
+        // 1
+        var Pagination1 = new Pagination({
+          totalResults: 100
+        }, dojo.byId('pagination1'));
+        Pagination1.startup();
+
+        Pagination1.on("page", function (evt) {
+          console.log(evt);
+        });
+
+        // 2
+        var Pagination2 = new Pagination({
+          totalResults: 900,
+          resultsPerPage: 10,
+          currentPage: 1,
+          pagesPerSide: 1,
+          showPreviousNext: false
+        }, dojo.byId('pagination2'));
+        Pagination2.startup();
+        // 3
+        var Pagination3 = new Pagination({
+          totalResults: 225,
+          resultsPerPage: 5,
+          currentPage: 7,
+          pagesPerSide: 3,
+          showFirstLast: false
+        }, dojo.byId('pagination3'));
+        Pagination3.startup();
+        // 4
+        var Pagination4 = new Pagination({
+          totalResults: 500,
+          resultsPerPage: 25
+        }, dojo.byId('pagination4'));
+        Pagination4.startup();
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <h1>dijit-pagination-js</h1>
+  <p><a href="https://github.com/driskull/dijit-pagination-js">Github page</a> with documentation and more information on how to use this widget.</p>
+  <h2 id="ex1">Example 1</h2>
+  <div class="container">
+    <div id="pagination1"></div>
+  </div>
+  <pre>
+	var Pagination1 = new Pagination({
+        totalResults: 100
+    }, dojo.byId('pagination1'));
+    Pagination1.startup();
+	</pre>
+  <h2 id="ex2">Example 2</h2>
+  <div class="container">
+    <div id="pagination2"></div>
+  </div>
+  <pre>
+	var Pagination2 = new Pagination({
+        totalResults: 900,
+        resultsPerPage: 10,
+        currentPage: 1,
+        pagesPerSide: 1,
+        showPreviousNext: false
+    }, dojo.byId('pagination2'));
+	</pre>
+  <h2 id="ex3">Example 3</h2>
+  <div class="container">
+    <div id="pagination3"></div>
+  </div>
+  <pre>
+	var Pagination3 = new Pagination({
+        totalResults: 225,
+        resultsPerPage: 5,
+        currentPage: 7,
+        pagesPerSide: 3,
+        showFirstLast: false
+    }, dojo.byId('pagination3'));
+    Pagination3.startup();
+	</pre>
+  <h2 id="ex4">Example 4</h2>
+  <div class="container">
+    <div id="pagination4"></div>
+  </div>
+  <pre>
+	var Pagination4 = new Pagination({
+        totalResults: 500,
+        resultsPerPage: 25
+    }, dojo.byId('pagination4'));
+    Pagination4.startup();
+	</pre>
+</body>
+
+</html>
